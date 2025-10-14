@@ -4,3 +4,4 @@ env/
 venv/
 *.egg-info/
 todo.txt
+.gitignore
