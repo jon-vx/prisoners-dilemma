@@ -8,12 +8,18 @@ from constants import (
     BUTTON_HEIGHT,
 )
 
+import player
+import game_state
+
 pygame.init()
 pygame.display.set_caption("prisoners dilemma")
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 running = True
 clock = pygame.time.Clock()
 dt = 0
+
+font = pygame.font.SysFont("Arial", 12)
+text_surface = font.render("simulate", False, "black")
 
 colors = ["red", "blue", "green", "purple"]
 
@@ -23,6 +29,15 @@ button_dimensions = (
     BUTTON_WIDTH,
     BUTTON_HEIGHT,
 )
+
+
+player_1 = player.TitForTat(0)
+player_2 = player.Random(0)
+
+state = game_state.Game(player_1, player_2, 20)
+
+while not state.play_round():
+    print("play")
 
 
 def in_button(mos_pos, button_dimensions):
@@ -74,6 +89,7 @@ while running:
         ),
     )
 
+    screen.blit(text_surface, sim_button.center)
     pygame.display.flip()
 
     dt = clock.tick(60) / 1000
