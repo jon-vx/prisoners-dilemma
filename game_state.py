@@ -68,3 +68,8 @@ class Game:
             return (5, 5)
         else:
             raise ValueError(f"invalid inputs {move_1}, and {move_2}")
+
+    def return_player_scores(self):
+        scores = ()
+        scores = self.player_1.score, self.player_2.score
+        return scores

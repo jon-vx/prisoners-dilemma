@@ -19,7 +19,9 @@ clock = pygame.time.Clock()
 dt = 0
 
 font = pygame.font.SysFont("Arial", 12)
-text_surface = font.render("simulate", False, "black")
+text_simulate_surface = font.render("simulate", False, "black")
+text_player1_score = font.render("0", False, "blue")
+text_player2_score = font.render("0", False, "red")
 
 colors = ["red", "blue", "green", "purple"]
 
@@ -37,17 +39,9 @@ player_2 = player.Random(0)
 game = game_state.Game(player_1, player_2, 20)
 
 print("start game...")
-game.play_round()
-game.play_round()
-game.play_round()
-game.play_round()
-game.play_round()
-game.play_round()
-game.play_round()
-game.play_round()
-game.play_round()
-game.play_round()
-game.play_round()
+
+
+game.return_player_scores()
 
 
 def in_button(mos_pos, button_dimensions):
@@ -61,6 +55,8 @@ def in_button(mos_pos, button_dimensions):
         return False
 
 
+scores = ()
+
 while running:
     # poll for events
     for event in pygame.event.get():
@@ -69,7 +65,7 @@ while running:
         elif event.type == pygame.MOUSEBUTTONUP:
             mos_pos = pygame.mouse.get_pos()
             if in_button(mos_pos, button_dimensions):
-                print("simulate")
+                game.play_round()
 
     player1 = pygame.draw.rect(
         screen,
@@ -99,7 +95,7 @@ while running:
         ),
     )
 
-    screen.blit(text_surface, sim_button.center)
+    screen.blit(text_simulate_surface, sim_button.center)
     pygame.display.flip()
 
     dt = clock.tick(60) / 1000
