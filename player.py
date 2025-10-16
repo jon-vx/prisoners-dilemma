@@ -38,4 +38,5 @@ class Random(Player):
         self.last_move = self.init_move
 
     def next_move(self, opp_move: int) -> int:
-        return random.choice([0, 1])
+        self.last_move = random.choice([0, 1])
+        return self.last_move
