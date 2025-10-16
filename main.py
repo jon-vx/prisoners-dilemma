@@ -20,10 +20,7 @@ dt = 0
 
 font = pygame.font.SysFont("Arial", 12)
 text_simulate_surface = font.render("simulate", False, "black")
-text_player1_score = font.render("0", False, "blue")
-text_player2_score = font.render("0", False, "red")
 
-colors = ["red", "blue", "green", "purple"]
 
 button_dimensions = (
     (SCREEN_WIDTH / 2) - PLAYER_WIDTH,
@@ -55,9 +52,14 @@ def in_button(mos_pos, button_dimensions):
         return False
 
 
+text_player1_score = 0
+text_player1_score = 0
+
 scores = ()
 
 while running:
+    screen.fill("black")
+
     # poll for events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -95,7 +97,14 @@ while running:
         ),
     )
 
+    p1_score, p2_score = game.return_player_scores()
+    text_player1_score = font.render(str(p1_score), False, "blue")
+    text_player2_score = font.render(str(p2_score), False, "red")
+
+    screen.blit(text_player1_score, (100, 100))
+    screen.blit(text_player2_score, (800, 100))
     screen.blit(text_simulate_surface, sim_button.center)
+
     pygame.display.flip()
 
     dt = clock.tick(60) / 1000
