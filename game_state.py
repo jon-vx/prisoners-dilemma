@@ -34,8 +34,10 @@ class Game:
             self.player_2.score = player_2_score
 
             print(
-                f"Player_1 move: {player_1_move}\nPlayer_2 move: {player_2_move}\n\nPlayer_1 score: {self.player_1.score}\nPlayer_2 score {self.player_2.score}"
+                f"\nPlayer_1 move: {player_1_move}\nPlayer_2 move: {player_2_move}\n\nPlayer_1 score: {self.player_1.score}\nPlayer_2 score {self.player_2.score}\n"
             )
+
+            self.current_round += 1
             return False
         else:
             player_1_move: int = self.player_1.next_move(self.player_2.last_move)
@@ -46,6 +48,9 @@ class Game:
 
             self.player_1.score += player_1_score
             self.player_2.score += player_2_score
+            print(
+                f"\nPlayer_1 move: {player_1_move}\nPlayer_2 move: {player_2_move}\n\nPlayer_1 score: {self.player_1.score}\nPlayer_2 score {self.player_2.score}\n"
+            )
 
             if self.check_winner() is True:
                 return True

@@ -34,10 +34,20 @@ button_dimensions = (
 player_1 = player.TitForTat(0)
 player_2 = player.Random(0)
 
-state = game_state.Game(player_1, player_2, 20)
+game = game_state.Game(player_1, player_2, 20)
 
-while not state.play_round():
-    print("play")
+print("start game...")
+game.play_round()
+game.play_round()
+game.play_round()
+game.play_round()
+game.play_round()
+game.play_round()
+game.play_round()
+game.play_round()
+game.play_round()
+game.play_round()
+game.play_round()
 
 
 def in_button(mos_pos, button_dimensions):

@@ -1,0 +1,81 @@
+pygame 2.6.1 (SDL 2.28.4, Python 3.12.3)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+initialized players <player.TitForTat object at 0x7c30ec577410> and <player.Random object at 0x7c30ecfa3ef0>
+start game...
+
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 1
+Player_2 score 1
+
+
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 11
+Player_2 score 1
+
+
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 12
+Player_2 score 2
+
+
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 22
+Player_2 score 2
+
+
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 23
+Player_2 score 3
+
+
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 24
+Player_2 score 4
+
+
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 34
+Player_2 score 4
+
+
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 44
+Player_2 score 4
+
+
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 45
+Player_2 score 5
+
+
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 46
+Player_2 score 6
+
+
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 47
+Player_2 score 7
+
