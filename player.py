@@ -24,8 +24,10 @@ class TitForTat(Player):
 
     def next_move(self, opp_move: int) -> int:
         if opp_move == 0:
+            self.last_move = 0
             return 0
         elif opp_move == 1:
+            self.last_move = 1
             return 1
         else:
             raise ValueError(f"input error next_move({opp_move})")
