@@ -12,4 +12,7 @@
     - Naive Prober 
 - menu 
     - choose two startegies or play yourself
+- assets 
+    - add better sprites
+    - add audio 
 
