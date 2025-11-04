@@ -6,6 +6,7 @@ from constants import (
     PLAYER_HEIGHT,
     BUTTON_WIDTH,
     BUTTON_HEIGHT,
+    BUTTON_DIMENSIONS,
 )
 
 import player
@@ -22,29 +23,21 @@ font = pygame.font.SysFont("Arial", 12)
 text_simulate_surface = font.render("simulate", False, "black")
 
 
-button_dimensions = (
-    (SCREEN_WIDTH / 2) - PLAYER_WIDTH,
-    50,
-    BUTTON_WIDTH,
-    BUTTON_HEIGHT,
-)
-
-
-player_1 = player.TitForTat(0)
-player_2 = player.Random(0)
+player_1 = player.Unconditional_Coopearator(0)
+player_2 = player.Unconditional_Defector(0)
 
 game = game_state.Game(player_1, player_2, 20)
 
 print("start game...")
 
 
-game.return_player_scores()
+# game.return_player_scores()
 
 
-def in_button(mos_pos, button_dimensions):
+def in_button(mos_pos):
     mos_x, mos_y = mos_pos
 
-    but_x, but_y, but_w, but_h = button_dimensions
+    but_x, but_y, but_w, but_h = BUTTON_DIMENSIONS
 
     if but_x <= mos_x <= but_x + but_w and but_y <= mos_y <= but_y + but_h:
         return True
@@ -66,8 +59,12 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONUP:
             mos_pos = pygame.mouse.get_pos()
-            if in_button(mos_pos, button_dimensions):
-                game.play_round()
+            if in_button(mos_pos):
+                test = game.play_round()
+                if test:
+                    print("true")
+                else:
+                    print("false")
 
     player1 = pygame.draw.rect(
         screen,

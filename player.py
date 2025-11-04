@@ -7,12 +7,13 @@ class Player(ABC):
         self.init_move = 0
         self.last_move = self.init_move
         self.score = score
+        self.current_move = self.last_move
 
     def update_score(self, result):
         self.score += result
 
     @abstractmethod
-    def next_move(self, opp_move: int) -> int:
+    def gen_move(self, opp_move: int) -> int:
         pass
 
 
@@ -21,13 +22,14 @@ class TitForTat(Player):
         super().__init__(score)
         self.init_move = 1
         self.last_move = self.init_move
+        self.current_move = self.last_move
 
-    def next_move(self, opp_move: int) -> int:
+    def gen_move(self, opp_move: int) -> int:
         if opp_move == 0:
-            self.last_move = 0
+            self.current_move = 0
             return 0
         elif opp_move == 1:
-            self.last_move = 1
+            self.current_move = 1
             return 1
         else:
             raise ValueError(f"input error next_move({opp_move})")
@@ -38,7 +40,30 @@ class Random(Player):
         super().__init__(score)
         self.init_move = random.choice([0, 1])
         self.last_move = self.init_move
+        self.current_move = self.last_move
 
-    def next_move(self, opp_move: int) -> int:
-        self.last_move = random.choice([0, 1])
-        return self.last_move
+    def gen_move(self, opp_move: int) -> int:
+        self.current_move = random.choice([0, 1])
+        return self.current_move
+
+
+class Unconditional_Coopearator(Player):
+    def __init__(self, score):
+        super().__init__(score)
+        self.init_move = 1
+        self.current_move = self.init_move
+
+    def gen_move(self, opp_move: int) -> int:
+        self.current_move = 1
+        return self.current_move
+
+
+class Unconditional_Defector(Player):
+    def __init__(self, score):
+        super().__init__(score)
+        self.init_move = 0
+        self.current_move = self.init_move
+
+    def gen_move(self, opp_move: int) -> int:
+        self.current_move = 0
+        return self.current_move
