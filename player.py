@@ -3,10 +3,10 @@ import random
 
 
 class Player(ABC):
-    def __init__(self, score):
+    def __init__(self):
         self.init_move = 0
         self.last_move = self.init_move
-        self.score = score
+        self.score = 0
         self.current_move = self.last_move
 
     def update_score(self, result):
@@ -18,8 +18,9 @@ class Player(ABC):
 
 
 class TitForTat(Player):
-    def __init__(self, score):
-        super().__init__(score)
+    def __init__(self):
+        super().__init__()
+        self.score = 0
         self.init_move = 1
         self.last_move = self.init_move
         self.current_move = self.last_move
@@ -37,10 +38,11 @@ class TitForTat(Player):
 
 class Random(Player):
     def __init__(self, score):
-        super().__init__(score)
+        super().__init__()
         self.init_move = random.choice([0, 1])
         self.last_move = self.init_move
         self.current_move = self.last_move
+        self.score = 0
 
     def gen_move(self, opp_move: int) -> int:
         self.current_move = random.choice([0, 1])
@@ -48,8 +50,9 @@ class Random(Player):
 
 
 class Unconditional_Coopearator(Player):
-    def __init__(self, score):
-        super().__init__(score)
+    def __init__(self):
+        super().__init__()
+        self.score = 0
         self.init_move = 1
         self.current_move = self.init_move
 
@@ -59,10 +62,11 @@ class Unconditional_Coopearator(Player):
 
 
 class Unconditional_Defector(Player):
-    def __init__(self, score):
-        super().__init__(score)
+    def __init__(self):
+        super().__init__()
         self.init_move = 0
         self.current_move = self.init_move
+        self.score = 0
 
     def gen_move(self, opp_move: int) -> int:
         self.current_move = 0

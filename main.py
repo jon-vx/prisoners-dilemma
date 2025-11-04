@@ -6,11 +6,11 @@ from constants import (
     PLAYER_HEIGHT,
     BUTTON_WIDTH,
     BUTTON_HEIGHT,
-    BUTTON_DIMENSIONS,
 )
 
 import player
 import game_state
+import helpers
 
 pygame.init()
 pygame.display.set_caption("prisoners dilemma")
@@ -23,32 +23,18 @@ font = pygame.font.SysFont("Arial", 12)
 text_simulate_surface = font.render("simulate", False, "black")
 
 
-player_1 = player.Unconditional_Coopearator(0)
-player_2 = player.Unconditional_Defector(0)
-
-game = game_state.Game(player_1, player_2, 20)
+p1 = player.Unconditional_Coopearator()
+p2 = player.Unconditional_Defector()
+game = game_state.Game(p1, p2, 20)
 
 print("start game...")
 
 
-# game.return_player_scores()
-
-
-def in_button(mos_pos):
-    mos_x, mos_y = mos_pos
-
-    but_x, but_y, but_w, but_h = BUTTON_DIMENSIONS
-
-    if but_x <= mos_x <= but_x + but_w and but_y <= mos_y <= but_y + but_h:
-        return True
-    else:
-        return False
-
-
 text_player1_score = 0
 text_player1_score = 0
-
 scores = ()
+
+helpers.initialize_assets(screen)
 
 while running:
     screen.fill("black")
@@ -59,48 +45,19 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONUP:
             mos_pos = pygame.mouse.get_pos()
-            if in_button(mos_pos):
+            if helpers.in_button(mos_pos):
                 test = game.play_round()
                 if test:
                     print("true")
                 else:
                     print("false")
 
-    player1 = pygame.draw.rect(
-        screen,
-        "blue",
-        (20, (SCREEN_HEIGHT / 2) - PLAYER_HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT),
-    )
-
-    player2 = pygame.draw.rect(
-        screen,
-        "red",
-        (
-            SCREEN_WIDTH - (20 + PLAYER_WIDTH),
-            (SCREEN_HEIGHT / 2) - PLAYER_HEIGHT,
-            PLAYER_WIDTH,
-            PLAYER_HEIGHT,
-        ),
-    )
-
-    sim_button = pygame.draw.rect(
-        screen,
-        "white",
-        (
-            (SCREEN_WIDTH / 2) - PLAYER_WIDTH,
-            50,
-            BUTTON_WIDTH,
-            BUTTON_HEIGHT,
-        ),
-    )
-
-    p1_score, p2_score = game.return_player_scores()
-    text_player1_score = font.render(str(p1_score), False, "blue")
-    text_player2_score = font.render(str(p2_score), False, "red")
+    text_player1_score = font.render(str(game.player_1.score), False, "blue")
+    text_player2_score = font.render(str(game.player_2.score), False, "red")
 
     screen.blit(text_player1_score, (100, 100))
     screen.blit(text_player2_score, (800, 100))
-    screen.blit(text_simulate_surface, sim_button.center)
+    # screen.blit(text_simulate_surface, sim_button.center)
 
     pygame.display.flip()
 

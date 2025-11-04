@@ -2,10 +2,7 @@
 
 - make requirements.txt
 - Show Moves Played 
-- Remove score from player intializer
 - intergrate new strategies 
-    - Always Cooperate
-    - Always Defecct
     - Grim Trigger
     - Pavlov 
     - Gradual
@@ -15,4 +12,7 @@
 - assets 
     - add better sprites
     - add audio 
-
+- fix current/last/init logic
+- fix round tracking logic 
+- end game and restart when round is over
+- create render function in helpers.py
