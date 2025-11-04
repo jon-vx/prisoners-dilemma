@@ -19,8 +19,8 @@ font = pygame.font.SysFont("Arial", 12)
 text_simulate_surface = font.render("simulate", False, "black")
 
 
-p1 = player.Unconditional_Coopearator()
-p2 = player.Unconditional_Defector()
+p1 = player.TitForTat()
+p2 = player.Random()
 game = game_state.Game(p1, p2, 20)
 
 print("\n-----------\nstart game\n-----------\n")
@@ -42,11 +42,12 @@ while running:
         elif event.type == pygame.MOUSEBUTTONUP:
             mos_pos = pygame.mouse.get_pos()
             if in_button(mos_pos):
-                test = game.play_round()
-                if test:
-                    print("true")
+                game_over = game.play_round()
+                if game_over:
+                    print("game over")
+                    running = False
                 else:
-                    print("false")
+                    print("test")
 
     text_player1_score = font.render(str(game.player_1.score), False, "blue")
     text_player2_score = font.render(str(game.player_2.score), False, "red")

@@ -1,6 +1,9 @@
 ### TODO - Prisoners Dilemma Simulation 
 
-- make requirements.txt
+- create script that keeps logs
+- clean convaluted current/last/init logic
+- test with more strats
+- create render function in helpers.py
 - Show Moves Played 
 - intergrate new strategies 
     - Grim Trigger
@@ -12,7 +15,6 @@
 - assets 
     - add better sprites
     - add audio 
-- fix current/last/init logic
 - fix round tracking logic 
 - end game and restart when round is over
-- create render function in helpers.py
+- make requirements.txt

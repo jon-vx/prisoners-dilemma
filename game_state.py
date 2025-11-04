@@ -1,4 +1,3 @@
-from re import error
 from player import (
     Player,
     TitForTat,
@@ -24,17 +23,25 @@ class Game:
         if self.current_round == self.total_rounds:
             if self.player_1.score < self.player_2.score:
                 print("player 1 wins")
+                return True
 
             elif self.player_1.score > self.player_2.score:
                 print("player 2 wins")
+                return True
 
             elif self.player_1.score == self.player_2.score:
                 print("tie game")
+                return True
+        else:
+            return False
 
     def play_round(self) -> bool:
         if self.current_round == 1:
+            self.player_1.current_move = self.player_1.init_move
+            self.player_2.current_move = self.player_2.init_move
+
             scores = self.calculate_matrix_payoff(
-                self.player_1.init_move, self.player_2.init_move
+                self.player_1.current_move, self.player_2.current_move
             )
 
             self.player_1.score, self.player_2.score = scores
@@ -44,6 +51,9 @@ class Game:
             self.current_round += 1
             return False
         else:
+            self.player_1.last_move = self.player_1.current_move
+            self.player_2.last_move = self.player_2.current_move
+
             self.player_1.current_move = self.player_1.gen_move(self.player_2.last_move)
             self.player_2.current_move = self.player_2.gen_move(self.player_1.last_move)
 
@@ -58,7 +68,7 @@ class Game:
 
             self.current_round += 1
 
-            if self.check_winner() is True:
+            if self.check_winner():
                 return True
             else:
                 return False
