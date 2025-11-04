@@ -15,8 +15,6 @@ class Game:
         self.total_rounds = total_rounds
         self.current_round = 1
 
-        print(f"initialized players {player_1} and {player_2}")
-
     def print_status(self):
         print(
             f"\nROUND {self.current_round}/{self.total_rounds}\nPlayer_1 move: {self.player_1.current_move}\nPlayer_2 move: {self.player_2.current_move}\n\nPlayer_1 score: {self.player_1.score}\nPlayer_2 score {self.player_2.score}\n"

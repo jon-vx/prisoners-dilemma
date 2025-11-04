@@ -2,15 +2,11 @@ import pygame
 from constants import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
-    PLAYER_WIDTH,
-    PLAYER_HEIGHT,
-    BUTTON_WIDTH,
-    BUTTON_HEIGHT,
 )
 
 import player
 import game_state
-import helpers
+from helpers import initialize_assets, in_button
 
 pygame.init()
 pygame.display.set_caption("prisoners dilemma")
@@ -27,14 +23,14 @@ p1 = player.Unconditional_Coopearator()
 p2 = player.Unconditional_Defector()
 game = game_state.Game(p1, p2, 20)
 
-print("start game...")
+print("\n-----------\nstart game\n-----------\n")
 
 
 text_player1_score = 0
 text_player1_score = 0
 scores = ()
 
-helpers.initialize_assets(screen)
+initialize_assets(screen)
 
 while running:
     screen.fill("black")
@@ -45,7 +41,7 @@ while running:
             running = False
         elif event.type == pygame.MOUSEBUTTONUP:
             mos_pos = pygame.mouse.get_pos()
-            if helpers.in_button(mos_pos):
+            if in_button(mos_pos):
                 test = game.play_round()
                 if test:
                     print("true")
@@ -54,10 +50,11 @@ while running:
 
     text_player1_score = font.render(str(game.player_1.score), False, "blue")
     text_player2_score = font.render(str(game.player_2.score), False, "red")
+    p1_rect, p2_rect, sim_button = initialize_assets(screen)
 
     screen.blit(text_player1_score, (100, 100))
     screen.blit(text_player2_score, (800, 100))
-    # screen.blit(text_simulate_surface, sim_button.center)
+    screen.blit(text_simulate_surface, sim_button.center)
 
     pygame.display.flip()
 
