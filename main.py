@@ -19,8 +19,9 @@ font = pygame.font.SysFont("Arial", 12)
 text_simulate_surface = font.render("simulate", False, "black")
 
 
-p1 = player.TitForTat()
-p2 = player.Random()
+p1 = player.Random()
+p2 = player.Grim_Trigger()
+
 game = game_state.Game(p1, p2, 20)
 
 print("\n-----------\nstart game\n-----------\n")

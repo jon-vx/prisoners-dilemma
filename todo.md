@@ -1,8 +1,6 @@
 ### TODO - Prisoners Dilemma Simulation 
 
-- create script that keeps logs
 - clean convaluted current/last/init logic
-- test with more strats
 - create render function in helpers.py
 - Show Moves Played 
 - intergrate new strategies 
