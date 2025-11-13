@@ -14,13 +14,17 @@ class Game:
         self.total_rounds = total_rounds
         self.current_round = 1
 
+    def init_log(self):
+        self.player_1.log_player()
+        self.player_2.log_player()
+
     def print_status(self):
         print(
             f"\nROUND {self.current_round}/{self.total_rounds}\nPlayer_1 move: {self.player_1.current_move}\nPlayer_2 move: {self.player_2.current_move}\n\nPlayer_1 score: {self.player_1.score}\nPlayer_2 score {self.player_2.score}\n"
         )
 
     def check_winner(self):
-        if self.current_round == self.total_rounds:
+        if self.current_round > self.total_rounds:
             if self.player_1.score < self.player_2.score:
                 print("player 1 wins")
                 return True

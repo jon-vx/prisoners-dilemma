@@ -1,0 +1,179 @@
+pygame 2.6.1 (SDL 2.28.4, Python 3.12.3)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+
+-----------
+start game
+-----------
+
+
+ROUND 1/20
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 1
+Player_2 score 1
+
+test
+
+ROUND 2/20
+Player_1 move: 0
+Player_2 move: 1
+
+Player_1 score: 1
+Player_2 score 11
+
+test
+
+ROUND 3/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 11
+Player_2 score 11
+
+test
+
+ROUND 4/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 21
+Player_2 score 11
+
+test
+
+ROUND 5/20
+Player_1 move: 0
+Player_2 move: 0
+
+Player_1 score: 26
+Player_2 score 16
+
+test
+
+ROUND 6/20
+Player_1 move: 0
+Player_2 move: 0
+
+Player_1 score: 31
+Player_2 score 21
+
+test
+
+ROUND 7/20
+Player_1 move: 0
+Player_2 move: 0
+
+Player_1 score: 36
+Player_2 score 26
+
+test
+
+ROUND 8/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 46
+Player_2 score 26
+
+test
+
+ROUND 9/20
+Player_1 move: 0
+Player_2 move: 0
+
+Player_1 score: 51
+Player_2 score 31
+
+test
+
+ROUND 10/20
+Player_1 move: 0
+Player_2 move: 0
+
+Player_1 score: 56
+Player_2 score 36
+
+test
+
+ROUND 11/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 66
+Player_2 score 36
+
+test
+
+ROUND 12/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 76
+Player_2 score 36
+
+test
+
+ROUND 13/20
+Player_1 move: 0
+Player_2 move: 0
+
+Player_1 score: 81
+Player_2 score 41
+
+test
+
+ROUND 14/20
+Player_1 move: 0
+Player_2 move: 0
+
+Player_1 score: 86
+Player_2 score 46
+
+test
+
+ROUND 15/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 96
+Player_2 score 46
+
+test
+
+ROUND 16/20
+Player_1 move: 0
+Player_2 move: 0
+
+Player_1 score: 101
+Player_2 score 51
+
+test
+
+ROUND 17/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 111
+Player_2 score 51
+
+test
+
+ROUND 18/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 121
+Player_2 score 51
+
+test
+
+ROUND 19/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 131
+Player_2 score 51
+
+player 2 wins
+game over

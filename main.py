@@ -26,6 +26,8 @@ game = game_state.Game(p1, p2, 20)
 
 print("\n-----------\nstart game\n-----------\n")
 
+game.init_log()
+
 
 text_player1_score = 0
 text_player1_score = 0
@@ -47,8 +49,6 @@ while running:
                 if game_over:
                     print("game over")
                     running = False
-                else:
-                    print("test")
 
     text_player1_score = font.render(str(game.player_1.score), False, "blue")
     text_player2_score = font.render(str(game.player_2.score), False, "red")

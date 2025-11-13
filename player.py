@@ -16,6 +16,10 @@ class Player(ABC):
     def gen_move(self, opp_last_move: int) -> int:
         pass
 
+    @abstractmethod
+    def log_player(self):
+        pass
+
 
 class TitForTat(Player):
     def __init__(self):
@@ -35,6 +39,9 @@ class TitForTat(Player):
         else:
             raise ValueError(f"input error next_move({opp_last_move})")
 
+    def log_player(self):
+        print("tit for tat")
+
 
 class Random(Player):
     def __init__(self):
@@ -47,6 +54,9 @@ class Random(Player):
     def gen_move(self, opp_last_move: int) -> int:
         self.current_move = random.choice([0, 1])
         return self.current_move
+
+    def log_player(self):
+        print("random")
 
 
 class Unconditional_Coopearator(Player):
@@ -61,6 +71,9 @@ class Unconditional_Coopearator(Player):
         self.current_move = 1
         return self.current_move
 
+    def log_player(self):
+        print("unconditional cooperator")
+
 
 class Unconditional_Defector(Player):
     def __init__(self):
@@ -73,6 +86,9 @@ class Unconditional_Defector(Player):
     def gen_move(self, opp_last_move: int) -> int:
         self.current_move = 0
         return self.current_move
+
+    def log_player(self):
+        print("unconditional defector")
 
 
 class Grim_Trigger(Player):
@@ -92,3 +108,6 @@ class Grim_Trigger(Player):
                 return 0
             else:
                 return 1
+
+    def log_player(self):
+        print("grim trigger")

@@ -13,6 +13,5 @@
 - assets 
     - add better sprites
     - add audio 
-- fix round tracking logic 
 - end game and restart when round is over
 - make requirements.txt
