@@ -1,0 +1,171 @@
+pygame 2.6.1 (SDL 2.28.4, Python 3.12.3)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+
+-----------
+start game
+-----------
+
+random
+Pavlov
+
+ROUND 1/20
+Player_1 move: 0
+Player_2 move: 1
+
+Player_1 score: 0
+Player_2 score 10
+
+
+ROUND 2/20
+Player_1 move: 0
+Player_2 move: 0
+
+Player_1 score: 5
+Player_2 score 15
+
+
+ROUND 3/20
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 6
+Player_2 score 16
+
+
+ROUND 4/20
+Player_1 move: 0
+Player_2 move: 1
+
+Player_1 score: 6
+Player_2 score 26
+
+
+ROUND 5/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 16
+Player_2 score 26
+
+
+ROUND 6/20
+Player_1 move: 0
+Player_2 move: 0
+
+Player_1 score: 21
+Player_2 score 31
+
+
+ROUND 7/20
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 22
+Player_2 score 32
+
+
+ROUND 8/20
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 23
+Player_2 score 33
+
+
+ROUND 9/20
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 24
+Player_2 score 34
+
+
+ROUND 10/20
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 25
+Player_2 score 35
+
+
+ROUND 11/20
+Player_1 move: 1
+Player_2 move: 1
+
+Player_1 score: 26
+Player_2 score 36
+
+
+ROUND 12/20
+Player_1 move: 0
+Player_2 move: 1
+
+Player_1 score: 26
+Player_2 score 46
+
+
+ROUND 13/20
+Player_1 move: 0
+Player_2 move: 0
+
+Player_1 score: 31
+Player_2 score 51
+
+
+ROUND 14/20
+Player_1 move: 0
+Player_2 move: 1
+
+Player_1 score: 31
+Player_2 score 61
+
+
+ROUND 15/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 41
+Player_2 score 61
+
+
+ROUND 16/20
+Player_1 move: 1
+Player_2 move: q
+
+Player_1 score: 51
+Player_2 score 61
+
+
+ROUND 17/20
+Player_1 move: 0
+Player_2 move: 0
+
+Player_1 score: 56
+Player_2 score 66
+
+
+ROUND 18/20
+Player_1 move: 0
+Player_2 move: 1
+
+Player_1 score: 56
+Player_2 score 76
+
+
+ROUND 19/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 66
+Player_2 score 76
+
+
+ROUND 20/20
+Player_1 move: 1
+Player_2 move: 0
+
+Player_1 score: 76
+Player_2 score 76
+
+tie game
+game over

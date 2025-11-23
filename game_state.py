@@ -6,6 +6,8 @@ from player import (
     Unconditional_Coopearator,
 )
 
+import numpy as np
+
 
 class Game:
     def __init__(self, player_1: Player, player_2: Player, total_rounds: int):
@@ -13,6 +15,8 @@ class Game:
         self.player_2 = player_2
         self.total_rounds = total_rounds
         self.current_round = 1
+        self.p1_moves = np.zeros(total_rounds)
+        self.p2_moves = np.zeros(total_rounds)
 
     def init_log(self):
         self.player_1.log_player()
@@ -27,14 +31,21 @@ class Game:
         if self.current_round > self.total_rounds:
             if self.player_1.score < self.player_2.score:
                 print("player 1 wins")
-                return True
+                print(self.p1_moves)
+                print(self.p2_moves)
 
+                return True
             elif self.player_1.score > self.player_2.score:
                 print("player 2 wins")
+                print(self.p1_moves)
+                print(self.p2_moves)
+
                 return True
 
             elif self.player_1.score == self.player_2.score:
                 print("tie game")
+                print(self.p1_moves)
+                print(self.p2_moves)
                 return True
         else:
             return False
@@ -49,27 +60,33 @@ class Game:
             )
 
             self.player_1.score, self.player_2.score = scores
+            (
+                self.p1_moves[self.current_round - 1],
+                self.p2_moves[self.current_round - 1],
+            ) = scores
 
             self.print_status()
-
             self.current_round += 1
             return False
         else:
+            # SOMETHING IS BROKEN HERE
             self.player_1.last_move = self.player_1.current_move
             self.player_2.last_move = self.player_2.current_move
 
             self.player_1.current_move = self.player_1.gen_move(self.player_2.last_move)
             self.player_2.current_move = self.player_2.gen_move(self.player_1.last_move)
 
-            player_1_score, player_2_score = self.calculate_matrix_payoff(
+            scores = self.calculate_matrix_payoff(
                 self.player_1.current_move, self.player_2.current_move
             )
 
-            self.player_1.score += player_1_score
-            self.player_2.score += player_2_score
+            self.player_1.score, self.player_2.score = scores
+            (
+                self.p1_moves[self.current_round - 1],
+                self.p2_moves[self.current_round - 1],
+            ) = scores
 
             self.print_status()
-
             self.current_round += 1
 
             if self.check_winner():

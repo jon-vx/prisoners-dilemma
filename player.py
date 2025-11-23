@@ -1,13 +1,17 @@
 from abc import abstractmethod, ABC
 import random
+import numpy as np
 
 
 class Player(ABC):
-    def __init__(self):
+    def __init__(self, rounds):
+        self.rounds = rounds
         self.init_move = 0
         self.last_move = self.init_move
         self.score = 0
         self.current_move = self.last_move
+        self.current_round = 1
+        scores = np.zeros(rounds)
 
     def update_score(self, result):
         self.score += result
@@ -22,12 +26,13 @@ class Player(ABC):
 
 
 class TitForTat(Player):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, rounds):
+        super().__init__(rounds)
         self.score = 0
         self.init_move = 1
         self.last_move = self.init_move
         self.current_move = self.last_move
+        scores = np.zeros(rounds)
 
     def gen_move(self, opp_last_move: int) -> int:
         if opp_last_move == 0:
@@ -44,12 +49,13 @@ class TitForTat(Player):
 
 
 class Random(Player):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, rounds):
+        super().__init__(rounds)
         self.init_move = random.choice([0, 1])
         self.last_move = self.init_move
         self.current_move = self.last_move
         self.score = 0
+        scores = np.zeros(rounds)
 
     def gen_move(self, opp_last_move: int) -> int:
         self.current_move = random.choice([0, 1])
@@ -60,12 +66,13 @@ class Random(Player):
 
 
 class Unconditional_Coopearator(Player):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, rounds):
+        super().__init__(rounds)
         self.score = 0
         self.init_move = 1
         self.last_move = self.init_move
         self.current_move = self.init_move
+        scores = np.zeros(rounds)
 
     def gen_move(self, opp_last_move: int) -> int:
         self.current_move = 1
@@ -76,12 +83,13 @@ class Unconditional_Coopearator(Player):
 
 
 class Unconditional_Defector(Player):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, rounds):
+        super().__init__(rounds)
         self.init_move = 0
         self.last_move = self.init_move
         self.current_move = self.init_move
         self.score = 0
+        scores = np.zeros(rounds)
 
     def gen_move(self, opp_last_move: int) -> int:
         self.current_move = 0
@@ -92,12 +100,13 @@ class Unconditional_Defector(Player):
 
 
 class Grim_Trigger(Player):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, rounds):
+        super().__init__(rounds)
         self.init_move = 1
         self.last_move = self.init_move
         self.current_move = self.init_move
         self.triggered = False
+        scores = np.zeros(rounds)
 
     def gen_move(self, opp_last_move: int) -> int:
         if self.triggered:
@@ -111,3 +120,20 @@ class Grim_Trigger(Player):
 
     def log_player(self):
         print("grim trigger")
+
+
+class Pavlov(Player):
+    def __init__(self, rounds):
+        super().__init__(rounds)
+        self.init_move = 1
+        self.last_move = self.init_move
+        self.current_move = self.init_move
+
+    def gen_move(self, opp_last_move: int) -> int:
+        if opp_last_move == self.last_move:
+            return 1
+        else:
+            return 0
+
+    def log_player(self):
+        print("Pavlov")

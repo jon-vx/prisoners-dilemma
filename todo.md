@@ -4,7 +4,6 @@
 - create render function in helpers.py
 - Show Moves Played 
 - intergrate new strategies 
-    - Grim Trigger
     - Pavlov 
     - Gradual
     - Naive Prober 
@@ -13,5 +12,5 @@
 - assets 
     - add better sprites
     - add audio 
-- end game and restart when round is over
 - make requirements.txt
+- implement numpy arrays for memory 

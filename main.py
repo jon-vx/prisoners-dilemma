@@ -8,7 +8,10 @@ import player
 import game_state
 from helpers import initialize_assets, in_button
 
+import numpy as np
+
 pygame.init()
+
 pygame.display.set_caption("prisoners dilemma")
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 running = True
@@ -19,8 +22,8 @@ font = pygame.font.SysFont("Arial", 12)
 text_simulate_surface = font.render("simulate", False, "black")
 
 
-p1 = player.Random()
-p2 = player.Grim_Trigger()
+p1 = player.Random(20)
+p2 = player.Pavlov(20)
 
 game = game_state.Game(p1, p2, 20)
 
