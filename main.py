@@ -50,7 +50,6 @@ while running:
             if in_button(mos_pos):
                 game_over = game.play_round()
                 if game_over:
-                    print("game over")
                     running = False
 
     text_player1_score = font.render(str(game.player_1.score), False, "blue")
