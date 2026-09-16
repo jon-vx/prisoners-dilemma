@@ -6,15 +6,23 @@ from player import (
     Unconditional_Coopearator,
 )
 
+from numbers import Integral
+
 import numpy as np
 
 
 class Game:
     def __init__(self, player_1: Player, player_2: Player, total_rounds: int):
+        if isinstance(total_rounds, bool) or not isinstance(total_rounds, Integral):
+            raise TypeError("total_rounds must be an integer")
+        if total_rounds < 1:
+            raise ValueError("total_rounds must be at least 1")
+
         self.player_1 = player_1
         self.player_2 = player_2
-        self.total_rounds = total_rounds
+        self.total_rounds = int(total_rounds)
         self.current_round = 1
+        self.game_over = False
 
         self.p1_total_scores = np.zeros(total_rounds)
         self.p2_total_scores = np.zeros(total_rounds)
@@ -85,6 +93,8 @@ class Game:
 
     # refactor so logging is in its own function
     def play_round(self) -> bool:
+        if self.game_over:
+            return True
 
         if self.current_round == 1:
             self.player_1.current_move = self.player_1.init_move
@@ -100,7 +110,8 @@ class Game:
             self.print_status()
             self.current_round += 1
 
-            return False
+            self.game_over = self.check_winner()
+            return self.game_over
         else:
 
             self.player_1.last_move = self.player_1.current_move
@@ -123,10 +134,8 @@ class Game:
             self.current_round += 1
 
             # changes this to check if current_round == max_rounds
-            if self.check_winner():
-                return True
-            else:
-                return False
+            self.game_over = self.check_winner()
+            return self.game_over
 
     def calculate_matrix_payoff(self, move_1, move_2):
         if move_1 == 1 and move_2 == 1:
@@ -144,5 +153,4 @@ class Game:
         scores = ()
         scores = self.player_1.score, self.player_2.score
         return scores
-
 
