@@ -4,5 +4,5 @@ from pydantic import BaseModel
 
 
 class HealthResponse(BaseModel):
-    status: Literal["ok"]
-    database: Literal["connected", "not_configured"]
+    status: Literal["ok", "error"]
+    database: Literal["connected", "not_configured", "unavailable"]

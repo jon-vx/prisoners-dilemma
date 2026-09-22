@@ -5,6 +5,7 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class Settings:
     frontend_origins: tuple[str, ...]
+    database_url: str | None = None
 
 
 def get_settings() -> Settings:
@@ -12,4 +13,6 @@ def get_settings() -> Settings:
     origins = tuple(
         origin.strip() for origin in configured_origins.split(",") if origin.strip()
     )
-    return Settings(frontend_origins=origins)
+    return Settings(
+        frontend_origins=origins, database_url=os.getenv("DATABASE_URL") or None
+    )
