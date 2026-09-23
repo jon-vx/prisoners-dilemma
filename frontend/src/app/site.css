@@ -1,0 +1,338 @@
+@layer components {
+  body {
+    margin: 0;
+    background: #fff;
+    color: #202631;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  h1,
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
+  h1 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  h2 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  h3 {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  a:focus-visible,
+  summary:focus-visible,
+  select:focus-visible,
+  .table-scroll:focus-visible {
+    outline: 2px solid #254e9c;
+    outline-offset: 3px;
+  }
+  .app-header {
+    height: 58px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 0 28px;
+    border-bottom: 1px solid #e2e5e9;
+  }
+  .app-header a {
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  .app-header span {
+    color: #697382;
+    font-size: 13px;
+  }
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    background: white;
+    padding: 10px;
+    z-index: 2;
+  }
+  .skip-link:focus {
+    top: 0;
+  }
+  .dashboard {
+    display: grid;
+    grid-template-columns: 330px minmax(0, 1fr);
+    min-height: calc(100vh - 58px);
+  }
+  .settings {
+    padding: 25px 24px;
+    background: #f8f9fb;
+    border-right: 1px solid #e2e5e9;
+  }
+  .settings h1 {
+    margin-bottom: 26px;
+  }
+  fieldset {
+    border: 0;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+  }
+  legend {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 13px;
+  }
+  .strategy-options {
+    display: grid;
+    gap: 17px;
+  }
+  .strategy-option {
+    display: flex;
+    align-items: start;
+    gap: 10px;
+  }
+  .strategy-option > button {
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .strategy-option p {
+    font-size: 12px;
+    color: #647080;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  .input-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 25px;
+  }
+  .input-grid input {
+    margin-top: 8px;
+    background: white;
+    font-variant-numeric: tabular-nums;
+  }
+  .self-play {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin: 20px 0;
+  }
+  .payoff-settings {
+    border-top: 1px solid #e2e5e9;
+    border-bottom: 1px solid #e2e5e9;
+    padding: 14px 0;
+  }
+  summary {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .payoff-settings p {
+    font-size: 12px;
+    color: #647080;
+    margin-top: 12px;
+  }
+  .payoff-settings .input-grid {
+    margin-top: 15px;
+  }
+  .run-summary {
+    color: #647080;
+    font-size: 12px;
+    margin: 20px 0 10px;
+  }
+  .error-message {
+    color: #a22b24;
+    background: #fff5f4;
+    border: 1px solid #f0c6c2;
+    padding: 12px;
+    font-size: 13px;
+    margin-top: 15px;
+    border-radius: 4px;
+  }
+  .storage-note {
+    color: #647080;
+    font-size: 12px;
+    margin-top: 12px;
+  }
+  .results {
+    min-width: 0;
+    padding: 26px 32px;
+  }
+  .results-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e2e5e9;
+  }
+  .results-heading p {
+    color: #647080;
+    font-size: 12px;
+  }
+  .empty-results {
+    margin-top: 30px;
+    padding: 28px;
+    background: #f8f9fb;
+    border: 1px solid #e2e5e9;
+    border-radius: 4px;
+  }
+  .empty-results p {
+    color: #647080;
+    margin-top: 7px;
+    max-width: 460px;
+    font-size: 13px;
+  }
+  .table-scroll {
+    overflow-x: auto;
+    margin-top: 22px;
+  }
+  .results-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .results-table caption {
+    text-align: left;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .results-table th,
+  .results-table td {
+    padding: 12px 10px;
+    text-align: right;
+    white-space: nowrap;
+    border-bottom: 1px solid #e2e5e9;
+  }
+  .results-table thead th {
+    background: #f8f9fb;
+    color: #647080;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .results-table th:first-child,
+  .results-table td:first-child,
+  .results-table th:nth-child(2) {
+    text-align: left;
+  }
+  .results-table tbody th {
+    font-weight: 500;
+  }
+  .match-section {
+    margin-top: 32px;
+    padding-top: 22px;
+    border-top: 1px solid #e2e5e9;
+  }
+  .match-heading {
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .match-heading > div {
+    max-width: 100%;
+  }
+  .match-heading label {
+    display: none;
+  }
+  select {
+    width: 100%;
+    max-width: 360px;
+    padding: 8px;
+    background: white;
+    border: 1px solid #ced9e5;
+    border-radius: 5px;
+    font: inherit;
+    font-size: 12px;
+  }
+  .match-totals {
+    display: flex;
+    gap: 36px;
+    margin: 24px 0;
+    font-size: 12px;
+  }
+  .match-totals strong {
+    font-size: 23px;
+    display: block;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .match-totals span {
+    color: #647080;
+  }
+  .chart-title {
+    margin-bottom: 15px;
+    font-size: 13px;
+  }
+  .chart-loading {
+    padding: 40px 0;
+    color: #647080;
+  }
+  .service-error {
+    padding: 28px;
+  }
+  .service-error p {
+    margin: 12px 0;
+    color: #647080;
+  }
+  @media (min-width: 1500px) {
+    .dashboard {
+      max-width: 1500px;
+      margin: auto;
+      border-left: 1px solid #e2e5e9;
+      border-right: 1px solid #e2e5e9;
+    }
+  }
+  @media (max-width: 800px) {
+    .dashboard {
+      grid-template-columns: 280px minmax(0, 1fr);
+    }
+    .settings {
+      padding: 22px 18px;
+    }
+    .results {
+      padding: 22px 18px;
+    }
+    .results-heading,
+    .match-heading {
+      flex-direction: column;
+      align-items: start;
+    }
+  }
+  @media (max-width: 620px) {
+    .app-header {
+      padding: 0 18px;
+      gap: 18px;
+    }
+    .app-header a {
+      font-size: 14px;
+    }
+    .dashboard {
+      grid-template-columns: 1fr;
+    }
+    .settings {
+      border-right: 0;
+      border-bottom: 1px solid #e2e5e9;
+    }
+    .settings h1 {
+      margin-bottom: 18px;
+    }
+    .results {
+      padding-bottom: 36px;
+    }
+    .match-heading > div {
+      width: 100%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+}
