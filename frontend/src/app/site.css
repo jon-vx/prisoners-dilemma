@@ -235,9 +235,6 @@
   .match-heading > div {
     max-width: 100%;
   }
-  .match-heading label {
-    display: none;
-  }
   select {
     width: 100%;
     max-width: 360px;

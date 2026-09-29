@@ -1,5 +1,7 @@
-from dataclasses import dataclass
+from collections.abc import Sequence
+from dataclasses import dataclass, field
 from enum import StrEnum
+from itertools import islice
 from numbers import Integral
 
 
@@ -48,13 +50,32 @@ class HistoryEntry:
     opponent_payoff: int
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, init=False, eq=False)
 class MatchHistory:
-    rounds: tuple[HistoryEntry, ...] = ()
+    """A fixed view of an append-only history, with tuple conversion on demand."""
+
+    _entries: Sequence[HistoryEntry] = field(repr=False)
+    _length: int
+
+    def __init__(self, rounds: Sequence[HistoryEntry] = ()) -> None:
+        object.__setattr__(self, "_entries", rounds)
+        object.__setattr__(self, "_length", len(rounds))
+
+    @property
+    def rounds(self) -> tuple[HistoryEntry, ...]:
+        return tuple(islice(self._entries, self._length))
 
     @property
     def last_round(self) -> HistoryEntry | None:
-        return self.rounds[-1] if self.rounds else None
+        return self._entries[self._length - 1] if self._length else None
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, MatchHistory):
+            return NotImplemented
+        return self.rounds == other.rounds
+
+    def __hash__(self) -> int:
+        return hash((self.rounds,))
 
 
 @dataclass(frozen=True)

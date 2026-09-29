@@ -53,20 +53,31 @@ def create_tournament(
         MatchDetail(
             id=uuid4(),
             tournament_id=tournament_id,
-            **{
-                field: getattr(match, field)
-                for field in MatchResult.__dataclass_fields__
-                if field != "history"
-            },
+            strategy_a=match.strategy_a,
+            strategy_b=match.strategy_b,
+            rounds=match.rounds,
+            seed=match.seed,
+            score_a=match.score_a,
+            score_b=match.score_b,
+            winner=match.winner,
+            cooperations_a=match.cooperations_a,
+            cooperations_b=match.cooperations_b,
+            cooperation_rate_a=match.cooperation_rate_a,
+            cooperation_rate_b=match.cooperation_rate_b,
             history=[RoundResponse.model_validate(row) for row in match.history],
         )
         for match in result.matches
     ]
-    response = make_tournament_response(
-        tournament_id,
-        configuration,
-        datetime.now(timezone.utc),
-        [MatchSummary(**match.model_dump(exclude={"history"})) for match in matches],
+    response = TournamentResponse(
+        id=tournament_id,
+        configuration=configuration,
+        created_at=datetime.now(timezone.utc),
+        matches=[
+            MatchSummary(**match.model_dump(exclude={"history"})) for match in matches
+        ],
+        leaderboard=[
+            LeaderboardResponse.model_validate(entry) for entry in result.leaderboard
+        ],
     )
     store.save(response, matches)
     return response

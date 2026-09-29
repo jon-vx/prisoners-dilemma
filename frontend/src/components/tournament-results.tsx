@@ -114,7 +114,9 @@ export function TournamentResults({
             <div className="match-heading">
               <h2 id="match-title">Match details</h2>
               <div>
-                <Label htmlFor="match">Match</Label>
+                <Label htmlFor="match" className="sr-only">
+                  Match
+                </Label>
                 <select
                   id="match"
                   value={matchId}

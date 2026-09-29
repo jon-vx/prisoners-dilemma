@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from uuid import UUID
 
 import sqlalchemy as sa
@@ -80,30 +81,52 @@ class PostgresTournamentStore:
     @staticmethod
     def _summary(row: RowMapping, rounds: int) -> MatchSummary:
         return MatchSummary(
-            **{
-                key: row[key]
-                for key in MatchSummary.model_fields
-                if key not in {"rounds", "cooperation_rate_a", "cooperation_rate_b"}
-            },
+            id=row["id"],
+            tournament_id=row["tournament_id"],
+            strategy_a=row["strategy_a"],
+            strategy_b=row["strategy_b"],
+            seed=row["seed"],
+            score_a=row["score_a"],
+            score_b=row["score_b"],
+            winner=row["winner"],
+            cooperations_a=row["cooperations_a"],
+            cooperations_b=row["cooperations_b"],
             rounds=rounds,
             cooperation_rate_a=row["cooperations_a"] / rounds,
             cooperation_rate_b=row["cooperations_b"] / rounds,
         )
 
+    def _load_tournaments(
+        self, connection: Connection, rows: Sequence[RowMapping]
+    ) -> list[TournamentResponse]:
+        if not rows:
+            return []
+        strategies_by_id: dict[UUID, list[str]] = {row["id"]: [] for row in rows}
+        matches_by_id: dict[UUID, list[RowMapping]] = {row["id"]: [] for row in rows}
+        strategy_rows = connection.execute(
+            sa.select(tournament_strategies)
+            .where(tournament_strategies.c.tournament_id.in_(strategies_by_id))
+            .order_by(tournament_strategies.c.position)
+        ).mappings()
+        for strategy in strategy_rows:
+            strategies_by_id[strategy["tournament_id"]].append(strategy["strategy_key"])
+        match_rows = connection.execute(
+            sa.select(matches)
+            .where(matches.c.tournament_id.in_(matches_by_id))
+            .order_by(matches.c.position)
+        ).mappings()
+        for match in match_rows:
+            matches_by_id[match["tournament_id"]].append(match)
+        return [
+            self._tournament(row, strategies_by_id[row["id"]], matches_by_id[row["id"]])
+            for row in rows
+        ]
+
     def _tournament(
-        self, connection: Connection, row: RowMapping
+        self, row: RowMapping, strategies: list[str], match_rows: list[RowMapping]
     ) -> TournamentResponse:
-        strategies = (
-            connection.execute(
-                sa.select(tournament_strategies.c.strategy_key)
-                .where(tournament_strategies.c.tournament_id == row["id"])
-                .order_by(tournament_strategies.c.position)
-            )
-            .scalars()
-            .all()
-        )
         config = TournamentCreate(
-            strategies=list(strategies),
+            strategies=strategies,
             rounds=row["rounds"],
             seed=row["seed"],
             include_self_play=row["include_self_play"],
@@ -112,11 +135,6 @@ class PostgresTournamentStore:
                 for key in ("temptation", "reward", "punishment", "sucker")
             },
         )
-        match_rows = connection.execute(
-            sa.select(matches)
-            .where(matches.c.tournament_id == row["id"])
-            .order_by(matches.c.position)
-        ).mappings()
         return make_tournament_response(
             row["id"],
             config,
@@ -133,7 +151,9 @@ class PostgresTournamentStore:
                 .mappings()
                 .first()
             )
-            return self._tournament(connection, row) if row is not None else None
+            if row is None:
+                return None
+            return self._load_tournaments(connection, [row])[0]
 
     def get_match(self, match_id: UUID) -> MatchDetail | None:
         with self.engine.connect() as connection:
@@ -177,7 +197,7 @@ class PostgresTournamentStore:
                 .all()
             )
             return TournamentPage(
-                items=[self._tournament(connection, row) for row in rows],
+                items=self._load_tournaments(connection, rows),
                 total=total,
                 limit=limit,
                 offset=offset,

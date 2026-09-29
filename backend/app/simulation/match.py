@@ -62,8 +62,8 @@ def run_match(
     cooperations_b = 0
 
     for round_number in range(1, round_count + 1):
-        move_a = strategy_a.choose_move(MatchHistory(tuple(history_a)), rng)
-        move_b = strategy_b.choose_move(MatchHistory(tuple(history_b)), rng)
+        move_a = strategy_a.choose_move(MatchHistory(history_a), rng)
+        move_b = strategy_b.choose_move(MatchHistory(history_b), rng)
         payoff_a, payoff_b = payoff_matrix.score(move_a, move_b)
 
         score_a += payoff_a

@@ -1,6 +1,32 @@
 import pytest
 
-from app.simulation.models import Move, PayoffMatrix
+from app.simulation.models import HistoryEntry, MatchHistory, Move, PayoffMatrix
+
+
+def test_history_snapshots_remain_read_only_and_stop_at_their_original_round():
+    entries = []
+    empty = MatchHistory(entries)
+    first = HistoryEntry(Move.COOPERATE, Move.DEFECT, 0, 5)
+    entries.append(first)
+    snapshot = MatchHistory(entries)
+    original_hash = hash(snapshot)
+    entries.append(HistoryEntry(Move.DEFECT, Move.DEFECT, 1, 1))
+
+    assert empty.rounds == ()
+    assert empty.last_round is None
+    assert snapshot.last_round is first
+    assert snapshot.rounds == (first,)
+    assert snapshot == MatchHistory(rounds=(first,))
+    assert hash(snapshot) == original_hash == hash(MatchHistory((first,)))
+    assert snapshot != MatchHistory(entries)
+    with pytest.raises(IndexError):
+        snapshot.rounds[1]
+    with pytest.raises(TypeError):
+        snapshot.rounds[0] = first
+    with pytest.raises(AttributeError):
+        snapshot.rounds = ()
+    with pytest.raises(AttributeError):
+        first.own_move = Move.DEFECT
 
 
 def test_default_payoff_matrix_scores_all_outcomes() -> None:

@@ -1,25 +1,18 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
+from fastapi import APIRouter, HTTPException, Query, Response
 
+from app.api.dependencies import Store
 from app.schemas.tournament import (
     MatchDetail,
     TournamentCreate,
     TournamentPage,
     TournamentResponse,
 )
-from app.services.storage import TournamentStore
 from app.services.tournaments import create_tournament
 
 router = APIRouter(tags=["tournaments"])
-
-
-def get_store(request: Request) -> TournamentStore:
-    return request.app.state.tournament_store
-
-
-Store = Annotated[TournamentStore, Depends(get_store)]
 
 
 @router.post("/tournaments", response_model=TournamentResponse, status_code=201)

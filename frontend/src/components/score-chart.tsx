@@ -63,7 +63,6 @@ export function ScoreChart({
           dataKey="cumulative_score_b"
           stroke="var(--color-cumulative_score_b)"
           strokeWidth={2}
-          strokeDasharray="5 3"
           dot={match.rounds === 1}
           isAnimationActive={false}
         />

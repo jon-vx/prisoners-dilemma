@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import hashlib
 from itertools import combinations, combinations_with_replacement
 from numbers import Integral
@@ -129,19 +129,7 @@ def build_leaderboard(
         ),
     )
     return tuple(
-        LeaderboardEntry(
-            rank=index,
-            strategy_key=entry.strategy_key,
-            matches_played=entry.matches_played,
-            wins=entry.wins,
-            losses=entry.losses,
-            ties=entry.ties,
-            total_score=entry.total_score,
-            cooperations=entry.cooperations,
-            total_rounds=entry.total_rounds,
-            cooperation_rate=entry.cooperation_rate,
-        )
-        for index, entry in enumerate(ordered, start=1)
+        replace(entry, rank=index) for index, entry in enumerate(ordered, start=1)
     )
 
 

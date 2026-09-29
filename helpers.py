@@ -39,17 +39,10 @@ def initialize_assets(screen):
         ),
     )
 
-    assets = player_1, player_2, sim_button
-
-    return assets
+    return player_1, player_2, sim_button
 
 
-def in_button(mos_pos):
-    mos_x, mos_y = mos_pos
-
-    but_x, but_y, but_w, but_h = BUTTON_DIMENSIONS
-
-    if but_x <= mos_x <= but_x + but_w and but_y <= mos_y <= but_y + but_h:
-        return True
-    else:
-        return False
+def in_button(mouse_position):
+    mouse_x, mouse_y = mouse_position
+    x, y, width, height = BUTTON_DIMENSIONS
+    return x <= mouse_x <= x + width and y <= mouse_y <= y + height

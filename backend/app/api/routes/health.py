@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Response
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.api.routes.tournaments import Store
+from app.api.dependencies import Store
 from app.schemas.health import HealthResponse
 
 router = APIRouter(tags=["health"])

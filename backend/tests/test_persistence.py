@@ -23,6 +23,42 @@ CONFIGURATION = {
 }
 
 
+def test_listing_batches_related_rows_and_preserves_pagination(db_engine):
+    with TestClient(create_app(store=PostgresTournamentStore(db_engine))) as client:
+        saved = [
+            client.post(
+                "/api/v1/tournaments",
+                json=CONFIGURATION | {"seed": seed, "strategies": strategies},
+            ).json()
+            for seed, strategies in (
+                (1, ["random", "tit_for_tat"]),
+                (2, ["always_defect", "tit_for_tat", "random"]),
+                (3, ["tit_for_tat", "always_defect"]),
+            )
+        ]
+        statements = []
+
+        def record_query(connection, cursor, statement, parameters, context, many):
+            statements.append(statement)
+
+        sa.event.listen(db_engine, "before_cursor_execute", record_query)
+        try:
+            response = client.get("/api/v1/tournaments?limit=2&offset=1")
+        finally:
+            sa.event.remove(db_engine, "before_cursor_execute", record_query)
+
+        assert response.status_code == 200
+        assert response.json() == {
+            "items": [saved[1], saved[0]],
+            "total": 3,
+            "limit": 2,
+            "offset": 1,
+        }
+        # Count, page, strategies, matches; query count must not grow per item.
+        assert len(statements) == 4
+        assert client.get("/api/v1/tournaments?offset=3").json()["items"] == []
+
+
 def test_postgres_survives_app_restart_and_health_checks_database(
     db_engine, monkeypatch
 ):

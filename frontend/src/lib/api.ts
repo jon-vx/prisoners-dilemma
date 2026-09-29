@@ -44,11 +44,11 @@ export async function forwardApi(
         "Cache-Control": "no-store",
       },
     });
-  } catch {
+  } catch (error) {
+    console.error("Simulation API request failed", path, error);
     return Response.json(
       {
-        detail:
-          "The simulation service could not be reached. Your settings have been kept.",
+        detail: "The simulation service could not be reached. Please try again.",
       },
       { status: 503 },
     );

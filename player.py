@@ -1,6 +1,5 @@
 from abc import abstractmethod, ABC
 import random
-import numpy as np
 
 
 class Player(ABC):
@@ -11,7 +10,6 @@ class Player(ABC):
         self.score = 0
         self.current_move = self.last_move
         self.current_round = 1
-        scores = np.zeros(rounds)
 
     def update_score(self, result):
         self.score += result
@@ -32,7 +30,6 @@ class TitForTat(Player):
         self.init_move = 1
         self.last_move = self.init_move
         self.current_move = self.last_move
-        scores = np.zeros(rounds)
 
     def gen_move(self, opp_last_move: int) -> int:
         if opp_last_move == 0:
@@ -55,7 +52,6 @@ class Random(Player):
         self.last_move = self.init_move
         self.current_move = self.last_move
         self.score = 0
-        scores = np.zeros(rounds)
 
     def gen_move(self, opp_last_move: int) -> int:
         self.current_move = random.choice([0, 1])
@@ -72,7 +68,6 @@ class Unconditional_Coopearator(Player):
         self.init_move = 1
         self.last_move = self.init_move
         self.current_move = self.init_move
-        scores = np.zeros(rounds)
 
     def gen_move(self, opp_last_move: int) -> int:
         self.current_move = 1
@@ -89,7 +84,6 @@ class Unconditional_Defector(Player):
         self.last_move = self.init_move
         self.current_move = self.init_move
         self.score = 0
-        scores = np.zeros(rounds)
 
     def gen_move(self, opp_last_move: int) -> int:
         self.current_move = 0
@@ -106,17 +100,14 @@ class Grim_Trigger(Player):
         self.last_move = self.init_move
         self.current_move = self.init_move
         self.triggered = False
-        scores = np.zeros(rounds)
 
     def gen_move(self, opp_last_move: int) -> int:
         if self.triggered:
             return 0
-        else:
-            if opp_last_move == 0:
-                self.triggered = True
-                return 0
-            else:
-                return 1
+        if opp_last_move == 0:
+            self.triggered = True
+            return 0
+        return 1
 
     def log_player(self):
         print("grim trigger")

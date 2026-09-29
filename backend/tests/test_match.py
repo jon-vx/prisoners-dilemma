@@ -1,7 +1,36 @@
 import pytest
 
 from app.simulation.match import run_match
-from app.simulation.models import Move
+from app.simulation.models import HistoryEntry, Move
+
+
+def test_retained_strategy_histories_preserve_each_players_past(monkeypatch):
+    class RecordingStrategy:
+        def __init__(self, move):
+            self.move = move
+            self.histories = []
+
+        def choose_move(self, history, rng):
+            self.histories.append(history)
+            return self.move
+
+    players = {
+        "cooperator": RecordingStrategy(Move.COOPERATE),
+        "defector": RecordingStrategy(Move.DEFECT),
+    }
+    monkeypatch.setattr("app.simulation.match.create_strategy", players.__getitem__)
+    result = run_match("cooperator", "defector", rounds=4, seed=42)
+
+    for key, expected in (
+        ("cooperator", HistoryEntry(Move.COOPERATE, Move.DEFECT, 0, 5)),
+        ("defector", HistoryEntry(Move.DEFECT, Move.COOPERATE, 5, 0)),
+    ):
+        histories = players[key].histories
+        assert len(histories) == 4
+        for completed_rounds, history in enumerate(histories):
+            assert history.rounds == (expected,) * completed_rounds
+            assert history.last_round == (expected if completed_rounds else None)
+    assert (result.score_a, result.score_b) == (0, 20)
 
 
 def test_match_returns_scores_cooperations_and_round_history() -> None:
