@@ -22,6 +22,8 @@ export function TournamentResults({
   const [match, setMatch] = useState<MatchDetail | null>(null);
   const [matchError, setMatchError] = useState("");
   const [retry, setRetry] = useState(0);
+  const [showPlayerA, setShowPlayerA] = useState(true);
+  const [showPlayerB, setShowPlayerB] = useState(true);
   const name = (key: string) =>
     strategies.find((strategy) => strategy.key === key)?.name ?? key;
 
@@ -128,6 +130,30 @@ export function TournamentResults({
                     </option>
                   ))}
                 </select>
+                {match ? (
+                  <div className="line-toggles" aria-label="Chart lines">
+                    <Button
+                      type="button"
+                      variant={showPlayerA ? "default" : "outline"}
+                      size="sm"
+                      aria-pressed={showPlayerA}
+                      disabled={showPlayerA && !showPlayerB}
+                      onClick={() => setShowPlayerA((value) => !value)}
+                    >
+                      {name(match.strategy_a)}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={showPlayerB ? "default" : "outline"}
+                      size="sm"
+                      aria-pressed={showPlayerB}
+                      disabled={showPlayerB && !showPlayerA}
+                      onClick={() => setShowPlayerB((value) => !value)}
+                    >
+                      {name(match.strategy_b)}
+                    </Button>
+                  </div>
+                ) : null}
               </div>
             </div>
             {matchError ? (
@@ -167,6 +193,8 @@ export function TournamentResults({
                   match={match}
                   nameA={name(match.strategy_a)}
                   nameB={name(match.strategy_b)}
+                  showA={showPlayerA}
+                  showB={showPlayerB}
                 />
               </>
             )}

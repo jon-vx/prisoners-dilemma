@@ -14,10 +14,14 @@ export function ScoreChart({
   match,
   nameA,
   nameB,
+  showA,
+  showB,
 }: {
   match: MatchDetail;
   nameA: string;
   nameB: string;
+  showA: boolean;
+  showB: boolean;
 }) {
   const config = {
     cumulative_score_a: { label: `${nameA} (A)`, color: "var(--chart-1)" },
@@ -50,22 +54,26 @@ export function ScoreChart({
           }
         />
         <ChartLegend content={<ChartLegendContent />} verticalAlign="top" />
-        <Line
-          type="linear"
-          dataKey="cumulative_score_a"
-          stroke="var(--color-cumulative_score_a)"
-          strokeWidth={2}
-          dot={match.rounds === 1}
-          isAnimationActive={false}
-        />
-        <Line
-          type="linear"
-          dataKey="cumulative_score_b"
-          stroke="var(--color-cumulative_score_b)"
-          strokeWidth={2}
-          dot={match.rounds === 1}
-          isAnimationActive={false}
-        />
+        {showA ? (
+          <Line
+            type="linear"
+            dataKey="cumulative_score_a"
+            stroke="var(--color-cumulative_score_a)"
+            strokeWidth={2}
+            dot={match.rounds === 1}
+            isAnimationActive={false}
+          />
+        ) : null}
+        {showB ? (
+          <Line
+            type="linear"
+            dataKey="cumulative_score_b"
+            stroke="var(--color-cumulative_score_b)"
+            strokeWidth={2}
+            dot={match.rounds === 1}
+            isAnimationActive={false}
+          />
+        ) : null}
       </LineChart>
     </ChartContainer>
   );

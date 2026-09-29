@@ -1,8 +1,8 @@
 @layer components {
   body {
     margin: 0;
-    background: #fff;
-    color: #202631;
+    background: var(--background);
+    color: var(--foreground);
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     line-height: 1.5;
@@ -27,9 +27,10 @@
   }
   a:focus-visible,
   summary:focus-visible,
+  button:focus-visible,
   select:focus-visible,
   .table-scroll:focus-visible {
-    outline: 2px solid #254e9c;
+    outline: 2px solid var(--ring);
     outline-offset: 3px;
   }
   .app-header {
@@ -38,7 +39,8 @@
     align-items: center;
     gap: 28px;
     padding: 0 28px;
-    border-bottom: 1px solid #e2e5e9;
+    border-bottom: 1px solid var(--border);
+    background: var(--background);
   }
   .app-header a {
     font-weight: 600;
@@ -46,13 +48,16 @@
     font-size: 16px;
   }
   .app-header span {
-    color: #697382;
+    color: var(--muted-foreground);
     font-size: 13px;
+  }
+  .theme-toggle {
+    margin-left: auto;
   }
   .skip-link {
     position: absolute;
     top: -100px;
-    background: white;
+    background: var(--card);
     padding: 10px;
     z-index: 2;
   }
@@ -66,8 +71,8 @@
   }
   .settings {
     padding: 25px 24px;
-    background: #f8f9fb;
-    border-right: 1px solid #e2e5e9;
+    background: var(--card);
+    border-right: 1px solid var(--border);
   }
   .settings h1 {
     margin-bottom: 26px;
@@ -98,7 +103,7 @@
   }
   .strategy-option p {
     font-size: 12px;
-    color: #647080;
+    color: var(--muted-foreground);
     margin-top: 4px;
     line-height: 1.5;
   }
@@ -110,7 +115,7 @@
   }
   .input-grid input {
     margin-top: 8px;
-    background: white;
+    background: var(--background);
     font-variant-numeric: tabular-nums;
   }
   .self-play {
@@ -120,8 +125,8 @@
     margin: 20px 0;
   }
   .payoff-settings {
-    border-top: 1px solid #e2e5e9;
-    border-bottom: 1px solid #e2e5e9;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
     padding: 14px 0;
   }
   summary {
@@ -131,28 +136,28 @@
   }
   .payoff-settings p {
     font-size: 12px;
-    color: #647080;
+    color: var(--muted-foreground);
     margin-top: 12px;
   }
   .payoff-settings .input-grid {
     margin-top: 15px;
   }
   .run-summary {
-    color: #647080;
+    color: var(--muted-foreground);
     font-size: 12px;
     margin: 20px 0 10px;
   }
   .error-message {
-    color: #a22b24;
-    background: #fff5f4;
-    border: 1px solid #f0c6c2;
+    color: #ffb0a8;
+    background: color-mix(in srgb, var(--destructive) 16%, var(--background));
+    border: 1px solid color-mix(in srgb, var(--destructive) 40%, var(--border));
     padding: 12px;
     font-size: 13px;
     margin-top: 15px;
     border-radius: 4px;
   }
   .storage-note {
-    color: #647080;
+    color: var(--muted-foreground);
     font-size: 12px;
     margin-top: 12px;
   }
@@ -166,21 +171,21 @@
     align-items: baseline;
     gap: 12px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #e2e5e9;
+    border-bottom: 1px solid var(--border);
   }
   .results-heading p {
-    color: #647080;
+    color: var(--muted-foreground);
     font-size: 12px;
   }
   .empty-results {
     margin-top: 30px;
     padding: 28px;
-    background: #f8f9fb;
-    border: 1px solid #e2e5e9;
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 4px;
   }
   .empty-results p {
-    color: #647080;
+    color: var(--muted-foreground);
     margin-top: 7px;
     max-width: 460px;
     font-size: 13px;
@@ -205,11 +210,11 @@
     padding: 12px 10px;
     text-align: right;
     white-space: nowrap;
-    border-bottom: 1px solid #e2e5e9;
+    border-bottom: 1px solid var(--border);
   }
   .results-table thead th {
-    background: #f8f9fb;
-    color: #647080;
+    background: var(--card);
+    color: var(--muted-foreground);
     font-size: 12px;
     font-weight: 500;
   }
@@ -224,7 +229,7 @@
   .match-section {
     margin-top: 32px;
     padding-top: 22px;
-    border-top: 1px solid #e2e5e9;
+    border-top: 1px solid var(--border);
   }
   .match-heading {
     display: flex;
@@ -239,11 +244,23 @@
     width: 100%;
     max-width: 360px;
     padding: 8px;
-    background: white;
-    border: 1px solid #ced9e5;
+    background: var(--background);
+    border: 1px solid var(--input);
+    color: var(--foreground);
     border-radius: 5px;
     font: inherit;
     font-size: 12px;
+  }
+  .line-toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+    margin-top: 11px;
+  }
+  .line-toggles button {
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .match-totals {
     display: flex;
@@ -258,7 +275,7 @@
     font-variant-numeric: tabular-nums;
   }
   .match-totals span {
-    color: #647080;
+    color: var(--muted-foreground);
   }
   .chart-title {
     margin-bottom: 15px;
@@ -266,21 +283,21 @@
   }
   .chart-loading {
     padding: 40px 0;
-    color: #647080;
+    color: var(--muted-foreground);
   }
   .service-error {
     padding: 28px;
   }
   .service-error p {
     margin: 12px 0;
-    color: #647080;
+    color: var(--muted-foreground);
   }
   @media (min-width: 1500px) {
     .dashboard {
       max-width: 1500px;
       margin: auto;
-      border-left: 1px solid #e2e5e9;
-      border-right: 1px solid #e2e5e9;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
     }
   }
   @media (max-width: 800px) {
@@ -312,7 +329,7 @@
     }
     .settings {
       border-right: 0;
-      border-bottom: 1px solid #e2e5e9;
+      border-bottom: 1px solid var(--border);
     }
     .settings h1 {
       margin-bottom: 18px;

@@ -22,6 +22,12 @@ const payoffFields = [
   { key: "sucker", label: "Sucker" },
 ] as const;
 
+function randomSeed() {
+  const values = new Uint32Array(2);
+  crypto.getRandomValues(values);
+  return values[0] * 2 ** 21 + (values[1] % 2 ** 21);
+}
+
 export function TournamentDashboard({
   strategies,
   persistent,
@@ -33,7 +39,7 @@ export function TournamentDashboard({
     strategies.map((strategy) => strategy.key),
   );
   const [rounds, setRounds] = useState("100");
-  const [seed, setSeed] = useState("42");
+  const [seed, setSeed] = useState("");
   const [selfPlay, setSelfPlay] = useState(false);
   const [payoffs, setPayoffs] = useState(defaultPayoffs);
   const [pending, setPending] = useState(false);
@@ -62,7 +68,8 @@ export function TournamentDashboard({
       );
       return;
     }
-    if (!Number.isSafeInteger(Number(seed))) {
+    const seedValue = seed.trim() === "" ? randomSeed() : Number(seed);
+    if (!Number.isSafeInteger(seedValue)) {
       setError(
         "Use a whole-number seed between −9,007,199,254,740,991 and 9,007,199,254,740,991.",
       );
@@ -93,7 +100,7 @@ export function TournamentDashboard({
         body: JSON.stringify({
           strategies: selected,
           rounds: count,
-          seed: Number(seed),
+          seed: seedValue,
           include_self_play: selfPlay,
           payoffs: matrix,
         }),
@@ -164,7 +171,7 @@ export function TournamentDashboard({
                   min={Number.MIN_SAFE_INTEGER}
                   max={Number.MAX_SAFE_INTEGER}
                   step={1}
-                  required
+                  placeholder="Random"
                   value={seed}
                   onChange={(event) => setSeed(event.target.value)}
                 />
