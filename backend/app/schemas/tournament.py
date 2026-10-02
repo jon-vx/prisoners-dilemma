@@ -40,6 +40,7 @@ class TournamentCreate(BaseModel):
 
     strategies: list[str] = Field(min_length=2, max_length=len(STRATEGY_REGISTRY))
     rounds: Integer = Field(ge=1, le=10_000)
+    matches_per_pair: Integer = Field(default=1, ge=1, le=10_000)
     seed: Integer = Field(ge=-(2**63), le=2**63 - 1)
     include_self_play: StrictBool = False
     payoffs: PayoffConfig = Field(default_factory=PayoffConfig)
@@ -57,7 +58,7 @@ class TournamentCreate(BaseModel):
     def limit_work(self) -> Self:
         count = len(self.strategies)
         matches = count * (count - 1) // 2 + (count if self.include_self_play else 0)
-        if matches * self.rounds > MAX_TOTAL_ROUNDS:
+        if matches * self.matches_per_pair * self.rounds > MAX_TOTAL_ROUNDS:
             raise ValueError(
                 f"a tournament may contain at most {MAX_TOTAL_ROUNDS:,} total rounds"
             )

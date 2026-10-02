@@ -7,6 +7,7 @@ export interface Strategy {
 export interface TournamentConfig {
   strategies: string[];
   rounds: number;
+  matches_per_pair: number;
   seed: number;
   include_self_play: boolean;
   payoffs: {

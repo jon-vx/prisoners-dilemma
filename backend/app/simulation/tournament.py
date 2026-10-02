@@ -32,6 +32,7 @@ class TournamentResult:
     payoffs: PayoffMatrix
     matches: tuple[MatchResult, ...]
     leaderboard: tuple[LeaderboardEntry, ...]
+    matches_per_pair: int = 1
 
 
 @dataclass
@@ -45,9 +46,14 @@ class _Standing:
     total_rounds: int = 0
 
 
-def _derive_match_seed(tournament_seed: int, strategy_a: str, strategy_b: str) -> int:
+def _derive_match_seed(
+    tournament_seed: int, strategy_a: str, strategy_b: str, repetition: int = 0
+) -> int:
     first_key, second_key = sorted((strategy_a, strategy_b))
     seed_material = f"{tournament_seed}\0{first_key}\0{second_key}".encode()
+    # Preserve existing single-match results while giving repeats independent seeds.
+    if repetition:
+        seed_material += f"\0{repetition}".encode()
     digest = hashlib.sha256(seed_material).digest()
     return int.from_bytes(digest[:8], "big") & ((1 << 63) - 1)
 
@@ -139,6 +145,7 @@ def run_tournament(
     seed: int,
     include_self_play: bool = False,
     payoffs: PayoffMatrix | None = None,
+    matches_per_pair: int = 1,
 ) -> TournamentResult:
     if isinstance(strategy_keys, (str, bytes)):
         raise TypeError("strategy_keys must be a sequence of strategy identifiers")
@@ -160,6 +167,10 @@ def run_tournament(
         raise TypeError("seed must be an integer")
     if not isinstance(include_self_play, bool):
         raise TypeError("include_self_play must be a boolean")
+    if isinstance(matches_per_pair, bool) or not isinstance(matches_per_pair, Integral):
+        raise TypeError("matches_per_pair must be an integer")
+    if not 1 <= matches_per_pair <= 10_000:
+        raise ValueError("matches_per_pair must be between 1 and 10,000")
 
     round_count = int(rounds)
     tournament_seed = int(seed)
@@ -174,10 +185,11 @@ def run_tournament(
             strategy_a_key=strategy_a,
             strategy_b_key=strategy_b,
             rounds=round_count,
-            seed=_derive_match_seed(tournament_seed, strategy_a, strategy_b),
+            seed=_derive_match_seed(tournament_seed, strategy_a, strategy_b, repetition),
             payoffs=payoff_matrix,
         )
         for strategy_a, strategy_b in pairings
+        for repetition in range(int(matches_per_pair))
     )
 
     return TournamentResult(
@@ -188,4 +200,5 @@ def run_tournament(
         payoffs=payoff_matrix,
         matches=matches,
         leaderboard=build_leaderboard(selected_strategies, matches),
+        matches_per_pair=int(matches_per_pair),
     )

@@ -39,6 +39,7 @@ export function TournamentDashboard({
     strategies.map((strategy) => strategy.key),
   );
   const [rounds, setRounds] = useState("100");
+  const [matchesPerPair, setMatchesPerPair] = useState("1");
   const [seed, setSeed] = useState("");
   const [selfPlay, setSelfPlay] = useState(false);
   const [payoffs, setPayoffs] = useState(defaultPayoffs);
@@ -48,6 +49,7 @@ export function TournamentDashboard({
   const pairCount =
     (selected.length * (selected.length - 1)) / 2 +
     (selfPlay ? selected.length : 0);
+  const matchCount = pairCount * (Number(matchesPerPair) || 0);
 
   async function run(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -57,14 +59,19 @@ export function TournamentDashboard({
       return;
     }
     const count = Number(rounds);
+    const repetitions = Number(matchesPerPair);
+    if (!Number.isInteger(repetitions) || repetitions < 1 || repetitions > 10000) {
+      setError("Use 1–10,000 matches per pairing.");
+      return;
+    }
     if (
       !Number.isInteger(count) ||
       count < 1 ||
       count > 10000 ||
-      count * pairCount > 100000
+      count * pairCount * repetitions > 100000
     ) {
       setError(
-        "Use 1–10,000 rounds per match, with no more than 100,000 rounds across all matches.",
+        "Use 1–10,000 rounds per match, with no more than 100,000 total rounds. Reduce rounds, matches per pairing, or the number of strategies.",
       );
       return;
     }
@@ -100,6 +107,7 @@ export function TournamentDashboard({
         body: JSON.stringify({
           strategies: selected,
           rounds: count,
+          matches_per_pair: repetitions,
           seed: seedValue,
           include_self_play: selfPlay,
           payoffs: matrix,
@@ -124,8 +132,13 @@ export function TournamentDashboard({
         <h1>New tournament</h1>
         <form onSubmit={run}>
           <fieldset disabled={pending}>
-            <legend>Strategies</legend>
-            <div className="strategy-options">
+            <legend id="strategies-title">Strategies</legend>
+            <div
+              className="strategy-options"
+              role="region"
+              aria-labelledby="strategies-title"
+              tabIndex={0}
+            >
               {strategies.map((strategy) => (
                 <div className="strategy-option" key={strategy.key}>
                   <Checkbox
@@ -161,6 +174,19 @@ export function TournamentDashboard({
                   required
                   value={rounds}
                   onChange={(event) => setRounds(event.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="matches-per-pair">Matches per pairing</Label>
+                <Input
+                  id="matches-per-pair"
+                  type="number"
+                  min={1}
+                  max={10000}
+                  step={1}
+                  required
+                  value={matchesPerPair}
+                  onChange={(event) => setMatchesPerPair(event.target.value)}
                 />
               </div>
               <div>
@@ -224,11 +250,11 @@ export function TournamentDashboard({
               </Button>
             </details>
             <p className="run-summary">
-              {pairCount} {pairCount === 1 ? "match" : "matches"} ·{" "}
+              {matchCount.toLocaleString()} {matchCount === 1 ? "match" : "matches"} ·{" "}
               {Number(rounds) > 0
-                ? (pairCount * Number(rounds)).toLocaleString()
+                ? (matchCount * Number(rounds)).toLocaleString()
                 : 0}{" "}
-              total rounds
+              total rounds (100,000 max)
             </p>
             <Button
               type="submit"

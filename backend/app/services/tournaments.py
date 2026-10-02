@@ -44,6 +44,7 @@ def create_tournament(
     result = run_tournament(
         configuration.strategies,
         rounds=configuration.rounds,
+        matches_per_pair=configuration.matches_per_pair,
         seed=configuration.seed,
         include_self_play=configuration.include_self_play,
         payoffs=PayoffMatrix(**configuration.payoffs.model_dump()),

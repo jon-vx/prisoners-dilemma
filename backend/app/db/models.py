@@ -17,6 +17,7 @@ tournaments = sa.Table(
     metadata,
     sa.Column("id", sa.Uuid, primary_key=True),
     sa.Column("rounds", sa.Integer, nullable=False),
+    sa.Column("matches_per_pair", sa.Integer, nullable=False, server_default=sa.text("1")),
     sa.Column("seed", sa.BigInteger, nullable=False),
     sa.Column("include_self_play", sa.Boolean, nullable=False),
     sa.Column("temptation", sa.Integer, nullable=False),
@@ -30,6 +31,9 @@ tournaments = sa.Table(
         server_default=sa.func.now(),
     ),
     sa.CheckConstraint("rounds BETWEEN 1 AND 10000", name="rounds_range"),
+    sa.CheckConstraint(
+        "matches_per_pair BETWEEN 1 AND 10000", name="matches_per_pair_range"
+    ),
     sa.CheckConstraint(
         "temptation > reward AND reward > punishment AND punishment > sucker",
         name="payoff_order",

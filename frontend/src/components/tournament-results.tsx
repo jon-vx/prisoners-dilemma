@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ScoreChart } from "@/components/score-chart";
 import { readResponse } from "@/lib/http";
@@ -64,7 +65,7 @@ export function TournamentResults({
           {pending
             ? "Running tournament…"
             : result
-              ? `${result.matches.length} ${result.matches.length === 1 ? "match" : "matches"} · ${result.configuration.rounds} rounds each · seed ${result.configuration.seed}`
+              ? `${result.matches.length} ${result.matches.length === 1 ? "match" : "matches"} · ${result.configuration.matches_per_pair ?? 1} per pairing · ${result.configuration.rounds} rounds each · seed ${result.configuration.seed}`
               : "No tournament run yet"}
         </p>
       </div>
@@ -124,34 +125,35 @@ export function TournamentResults({
                   value={matchId}
                   onChange={(event) => chooseMatch(event.target.value)}
                 >
-                  {result.matches.map((item) => (
+                  {result.matches.map((item, index) => (
                     <option key={item.id} value={item.id}>
                       {name(item.strategy_a)} vs {name(item.strategy_b)}
+                      {result.configuration.matches_per_pair > 1
+                        ? ` · Match ${(index % result.configuration.matches_per_pair) + 1} of ${result.configuration.matches_per_pair}`
+                        : ""}
                     </option>
                   ))}
                 </select>
                 {match ? (
-                  <div className="line-toggles" aria-label="Chart lines">
-                    <Button
-                      type="button"
-                      variant={showPlayerA ? "default" : "outline"}
-                      size="sm"
-                      aria-pressed={showPlayerA}
-                      disabled={showPlayerA && !showPlayerB}
-                      onClick={() => setShowPlayerA((value) => !value)}
-                    >
-                      {name(match.strategy_a)}
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={showPlayerB ? "default" : "outline"}
-                      size="sm"
-                      aria-pressed={showPlayerB}
-                      disabled={showPlayerB && !showPlayerA}
-                      onClick={() => setShowPlayerB((value) => !value)}
-                    >
-                      {name(match.strategy_b)}
-                    </Button>
+                  <div className="line-toggles" role="group" aria-label="Chart lines">
+                    <Label htmlFor="show-player-a">
+                      <Checkbox
+                        id="show-player-a"
+                        checked={showPlayerA}
+                        disabled={showPlayerA && !showPlayerB}
+                        onCheckedChange={(checked) => setShowPlayerA(checked === true)}
+                      />
+                      {name(match.strategy_a)} (A)
+                    </Label>
+                    <Label htmlFor="show-player-b">
+                      <Checkbox
+                        id="show-player-b"
+                        checked={showPlayerB}
+                        disabled={showPlayerB && !showPlayerA}
+                        onCheckedChange={(checked) => setShowPlayerB(checked === true)}
+                      />
+                      {name(match.strategy_b)} (B)
+                    </Label>
                   </div>
                 ) : null}
               </div>

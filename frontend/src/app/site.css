@@ -29,6 +29,7 @@
   summary:focus-visible,
   button:focus-visible,
   select:focus-visible,
+  .strategy-options:focus-visible,
   .table-scroll:focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 3px;
@@ -91,6 +92,14 @@
   .strategy-options {
     display: grid;
     gap: 17px;
+    align-content: start;
+    height: 330px;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted-foreground) var(--card);
+    padding: 4px 10px 4px 4px;
   }
   .strategy-option {
     display: flex;
@@ -257,10 +266,9 @@
     gap: 12px 18px;
     margin-top: 11px;
   }
-  .line-toggles button {
-    max-width: 170px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .line-toggles label {
+    font-size: 12px;
+    font-weight: 500;
   }
   .match-totals {
     display: flex;

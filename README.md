@@ -3,6 +3,9 @@
 Round-robin Iterated Prisoner's Dilemma tournaments with a FastAPI backend,
 PostgreSQL persistence, and a Next.js dashboard.
 
+Choose strategies, rounds per match, and matches per pairing. Setting matches per
+pairing to 5 runs every pair five times and combines their scores in the leaderboard.
+
 ## Run
 
 ```bash

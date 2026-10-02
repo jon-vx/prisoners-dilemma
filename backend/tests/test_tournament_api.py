@@ -18,6 +18,7 @@ def configuration():
     return {
         "strategies": ["always_cooperate", "always_defect", "tit_for_tat"],
         "rounds": 3,
+        "matches_per_pair": 1,
         "seed": 42,
         "include_self_play": False,
         "payoffs": {"temptation": 7, "reward": 4, "punishment": 2, "sucker": 0},
@@ -77,6 +78,14 @@ def test_list_is_paginated_and_newest_first(client, configuration):
         {"strategies": ["always_cooperate", "unknown"]},
         {"rounds": 0},
         {"rounds": 10_001},
+        {"matches_per_pair": 0},
+        {"matches_per_pair": -1},
+        {"matches_per_pair": 10_001},
+        {"matches_per_pair": True},
+        {"matches_per_pair": 1.5},
+        {"matches_per_pair": "5"},
+        {"matches_per_pair": None},
+        {"rounds": 10_000, "matches_per_pair": 4},
         {"payoffs": {"temptation": 3}},
         {
             "strategies": [
@@ -102,3 +111,43 @@ def test_invalid_configuration_is_rejected_without_saving(
 @pytest.mark.parametrize("path", ["tournaments", "matches"])
 def test_unknown_ids_return_404(client, path):
     assert client.get(f"/api/v1/{path}/{uuid4()}").status_code == 404
+
+
+def test_omitted_repeat_count_defaults_to_one(client, configuration):
+    configuration.pop("matches_per_pair")
+    response = client.post("/api/v1/tournaments", json=configuration)
+    assert response.status_code == 201
+    assert response.json()["configuration"]["matches_per_pair"] == 1
+    assert len(response.json()["matches"]) == 3
+
+
+def test_repeated_matches_can_be_retrieved_individually(client, configuration):
+    configuration["matches_per_pair"] = 5
+    response = client.post("/api/v1/tournaments", json=configuration)
+    assert response.status_code == 201
+    tournament = response.json()
+    assert tournament["configuration"] == configuration
+    assert len(tournament["matches"]) == 15
+    assert len({match["id"] for match in tournament["matches"]}) == 15
+    assert client.get(response.headers["Location"]).json() == tournament
+    for match in tournament["matches"]:
+        detail = client.get(f"/api/v1/matches/{match['id']}").json()
+        assert len(detail["history"]) == 3
+        assert detail["seed"] == match["seed"]
+    assert all(row["matches_played"] == 10 for row in tournament["leaderboard"])
+
+
+def test_repeat_round_budget_boundary():
+    from app.schemas.tournament import TournamentCreate
+
+    config = {
+        "strategies": ["always_cooperate", "always_defect"],
+        "rounds": 10_000,
+        "matches_per_pair": 10,
+        "seed": 42,
+    }
+    assert TournamentCreate(**config).matches_per_pair == 10
+    with pytest.raises(ValueError, match="100,000"):
+        TournamentCreate(**(config | {"matches_per_pair": 11}))
+    with pytest.raises(ValueError, match="100,000"):
+        TournamentCreate(**(config | {"include_self_play": True}))

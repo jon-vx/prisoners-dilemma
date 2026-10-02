@@ -28,6 +28,7 @@ class PostgresTournamentStore:
                 {
                     "id": tournament.id,
                     "rounds": config.rounds,
+                    "matches_per_pair": config.matches_per_pair,
                     "seed": config.seed,
                     "include_self_play": config.include_self_play,
                     "created_at": tournament.created_at,
@@ -128,6 +129,7 @@ class PostgresTournamentStore:
         config = TournamentCreate(
             strategies=strategies,
             rounds=row["rounds"],
+            matches_per_pair=row["matches_per_pair"],
             seed=row["seed"],
             include_self_play=row["include_self_play"],
             payoffs={
@@ -206,7 +208,7 @@ class PostgresTournamentStore:
     def check_health(self) -> str:
         with self.engine.connect() as connection:
             # Also catches an unmigrated database, not just an unavailable server.
-            connection.execute(sa.select(tournaments.c.id).limit(0))
+            connection.execute(sa.select(tournaments).limit(0))
         return "connected"
 
     def close(self) -> None:

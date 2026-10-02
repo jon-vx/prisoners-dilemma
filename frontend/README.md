@@ -3,7 +3,8 @@
 Next.js App Router, React, TypeScript, Tailwind CSS v4, shadcn/ui, and Recharts.
 
 The dashboard runs real tournaments through FastAPI. Select strategies, set rounds
-and a seed, optionally enable self-play or edit payoffs, then run the tournament.
+and an optional seed, set matches per pairing, optionally enable self-play or edit
+payoffs, then run the tournament. Each repeat starts fresh with its own seeded RNG.
 Results show a leaderboard and a match selector with cumulative-score charts.
 
 ## Development
@@ -61,6 +62,8 @@ npm start
 
 - Input settings remain in place after failed requests. Submission is disabled while running.
 - The form enforces the backend's round budget and payoff ordering before submitting.
+- Matches per pairing defaults to 1. Repeats count toward the 100,000-total-round budget;
+  results combine all repeats and the match selector identifies each match number.
 - Seeds entered in the browser are limited to JavaScript's safe integer range to avoid rounding.
 - Changing settings does not change existing results; each result shows the configuration that produced it.
 - Match requests are cancelled on selection changes so an older response cannot replace the current chart.

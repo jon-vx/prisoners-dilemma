@@ -1,4 +1,4 @@
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from alembic import command
 from fastapi.testclient import TestClient
@@ -75,6 +75,7 @@ def test_postgres_survives_app_restart_and_health_checks_database(
             json=CONFIGURATION
             | {
                 "seed": -(2**63),
+                "matches_per_pair": 5,
                 "payoffs": {
                     "temptation": 2**31 - 1,
                     "reward": 2_000_000_000,
@@ -85,6 +86,8 @@ def test_postgres_survives_app_restart_and_health_checks_database(
         )
         assert response.status_code == 201
         saved = response.json()
+        assert saved["configuration"]["matches_per_pair"] == 5
+        assert len(saved["matches"]) == 30
         assert max(match["score_b"] for match in saved["matches"]) > 2**31 - 1
         match_path = f"/api/v1/matches/{saved['matches'][0]['id']}"
         detail = first.get(match_path).json()
@@ -97,7 +100,7 @@ def test_postgres_survives_app_restart_and_health_checks_database(
     with db_engine.connect() as connection:
         assert (
             connection.scalar(sa.select(sa.func.count()).select_from(round_results))
-            == 60
+            == 300
         )
 
 
@@ -167,3 +170,24 @@ def test_migration_upgrade_downgrade_and_metadata_agree(db_engine):
         command.check(config)
     with TestClient(create_app(store=PostgresTournamentStore(db_engine))) as client:
         assert client.post("/api/v1/tournaments", json=CONFIGURATION).status_code == 201
+
+
+def test_repeat_count_migration_defaults_existing_tournaments_to_one(db_engine):
+    with db_engine.begin() as connection:
+        config = migration_config(connection)
+        command.downgrade(config, "a15c03909edf")
+        tournament_id = uuid4()
+        connection.execute(tournaments.insert().values(
+            id=tournament_id,
+            rounds=10,
+            seed=42,
+            include_self_play=False,
+            temptation=5,
+            reward=3,
+            punishment=1,
+            sucker=0,
+        ))
+        command.upgrade(config, "head")
+        assert connection.scalar(
+            sa.select(tournaments.c.matches_per_pair).where(tournaments.c.id == tournament_id)
+        ) == 1
