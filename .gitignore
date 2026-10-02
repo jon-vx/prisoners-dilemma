@@ -6,6 +6,7 @@ venv/
 *.egg-info/
 SPEC.md
 /todo.md
+/legacy/
 .venv/
 .env
 .env.*

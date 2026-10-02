@@ -6,6 +6,15 @@ PostgreSQL persistence, and a Next.js dashboard.
 Choose strategies, rounds per match, and matches per pairing. Setting matches per
 pairing to 5 runs every pair five times and combines their scores in the leaderboard.
 
+## Project layout
+
+- `backend/`: FastAPI API, simulation engine, database migrations, and tests.
+- `frontend/`: Next.js dashboard.
+- `compose.yaml`: local API and PostgreSQL services.
+- `legacy/`: local archive of the original Pygame application, tests, and logs.
+  This directory is Git-ignored and is not included in fresh clones. The original
+  files remain available in Git history.
+
 ## Run
 
 ```bash
