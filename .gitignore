@@ -11,3 +11,4 @@ SPEC.md
 .env
 .env.*
 !.env.example
+/reports/

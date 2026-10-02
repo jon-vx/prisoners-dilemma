@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: pdtest
+      POSTGRES_PASSWORD: pdtest-local-only
+      POSTGRES_DB: pdtest
+    volumes:
+      - ci_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pdtest -d pdtest"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+
+  tests:
+    build:
+      context: ./backend
+      target: test
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+    environment:
+      TEST_DATABASE_URL: postgresql+psycopg://pdtest:pdtest-local-only@db:5432/pdtest
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./reports:/reports
+    command:
+      - python
+      - -m
+      - pytest
+      - -ra
+      - -p
+      - no:cacheprovider
+      - --junitxml=/reports/backend.xml
+
+  frontend-checks:
+    build:
+      context: ./frontend
+      target: build
+    command:
+      - sh
+      - -c
+      - npm run lint && npm run typecheck
+
+volumes:
+  ci_postgres_data:
