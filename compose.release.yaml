@@ -1,0 +1,59 @@
+name: prisoners-production
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      POSTGRES_USER: prisoners
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+      POSTGRES_DB: prisoners_dilemma
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  api:
+    image: ${ECR_REGISTRY:?Set ECR_REGISTRY}/prisoners-api:${RELEASE_TAG:?Set RELEASE_TAG}
+    restart: unless-stopped
+    logging: *logging
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://prisoners:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}@db:5432/prisoners_dilemma
+      FRONTEND_ORIGINS: ${FRONTEND_ORIGIN:?Set FRONTEND_ORIGIN}
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import json, urllib.request; data = json.load(urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=3)); assert data['status'] == 'ok' and data['database'] == 'connected'"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+
+  frontend:
+    image: ${ECR_REGISTRY:?Set ECR_REGISTRY}/prisoners-frontend:${RELEASE_TAG:?Set RELEASE_TAG}
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      API_BASE_URL: http://api:8000/api/v1
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

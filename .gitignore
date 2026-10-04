@@ -12,3 +12,8 @@ SPEC.md
 .env.*
 !.env.example
 /reports/
+*.env
+*.pem
+*.key
+*.dump
+/backups/
