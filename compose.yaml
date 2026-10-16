@@ -30,5 +30,16 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+  frontend:
+    build: ./frontend
+    image: prisoners-frontend:local
+    environment:
+      API_BASE_URL: http://api:8000/api/v1
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+
 volumes:
   postgres_data:
